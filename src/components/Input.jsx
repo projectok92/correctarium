@@ -1,12 +1,14 @@
 import React from "react";
 import styled from 'styled-components';
 
-const Input = ({text, placeholder, value, onChange}) => {
+const Input = ({placeholder, value, onChange}) => {
   return (
     <FieldSetStyled>
-      <LegendStyled>
-        {text}
-      </LegendStyled>
+      {value !== '' && (
+        <LegendStyled>
+          {placeholder}
+        </LegendStyled>
+      )}
 
       <InputStyled
         placeholder={placeholder}
@@ -20,8 +22,9 @@ const Input = ({text, placeholder, value, onChange}) => {
 };
 
 const FieldSetStyled = styled.fieldset`
+  position: relative;
   width: 345px;
-  height: 68px;
+  height: 60px;
   padding: 0;
   border-radius: 8px;
   border: 1px solid #eee;
@@ -41,7 +44,6 @@ const InputStyled = styled.input`
   line-height: 22px;
   padding: 19px 20px;
   position: relative;
-  top: -8px;
   border: none;
   outline: none;
 
@@ -57,6 +59,8 @@ const InputStyled = styled.input`
 `;
 
 const LegendStyled = styled.legend`
+  position: absolute;
+  top: -8px;
   font-size: 12px;
   font-weight: 400;
   font-stretch: normal;
@@ -65,9 +69,6 @@ const LegendStyled = styled.legend`
   letter-spacing: -.04px;
   color: #a0a1a4;
   margin-left: 22px;
-  -webkit-transform: translateY(-2px);
-  -ms-transform: translateY(-2px);
-  transform: translateY(-2px);
   display: inline-block;
   height: 15px;
 
