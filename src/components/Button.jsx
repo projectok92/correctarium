@@ -32,7 +32,8 @@ const ButtonStyled = styled.button`
   
   &:disabled {
     color: hsla(0,0%,100%,.3);
-    cursor: default;  }
+    cursor: default;  
+  }
 `;
 
 export default Button;
