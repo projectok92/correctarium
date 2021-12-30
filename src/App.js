@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 
 import Button from './components/Button';
 import Input from './components/Input';
+import TextArea from './components/TextArea';
 
 const GlobalStyle = createGlobalStyle`
   /* cyrillic-ext */
@@ -520,6 +521,8 @@ const GlobalStyle = createGlobalStyle`
 const App = () => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
+  const [comment, setComment] = useState('');
+  const [textToEdit, setTextToEdit] = useState('');
 
   const changeEmailHandler = (e) => {
     const element = e.target;
@@ -533,32 +536,118 @@ const App = () => {
     setName(value);
   }
 
+  const changeCommentHandler = (e) => {
+    const element = e.target;
+    const value = element.value;
+    setComment(value);
+  }
 
-
-
+  const changeTextToEditHandler = (e) => {
+    const element = e.target;
+    const value = element.value;
+    setTextToEdit(value);
+  }
+  
   return (
     <>
       <GlobalStyle />
+      <Wrapper>
+        <div>
 
-      <div>
-        <Input
-          placeholder="Ваша електронна пошта"
-          value={email}
-          onChange={changeEmailHandler}
-        />
+          <TextAreaContainerStyled>
+            <TextArea
+              value={textToEdit}
+              onChange={changeTextToEditHandler}
+            />
 
-        <Input
-          placeholder="Ваше ім’я"
-          value={name}
-          onChange={changeNameHandler}
-        />
-      </div>
+            <UploadAreaStyled
+              isHidden={textToEdit !== ''}
+            >
+              <SpanStyled>Введіть текст або </SpanStyled>
+              <LableStyled>завантажте файл
+                <InputFileStyled
+                  type="file"
+                  accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, .rtf, .txt, .pdf, .zip"
+                />
+              </LableStyled>
 
-      <div>
-        <Button text="Замовити" isEnable={true} />
-      </div>
+            </UploadAreaStyled>
+
+          </TextAreaContainerStyled>
+
+          <div>
+            <Input
+              placeholder="Ваша електронна пошта"
+              value={email}
+              onChange={changeEmailHandler}
+            />
+
+            <Input
+              placeholder="Ваше ім’я"
+              value={name}
+              onChange={changeNameHandler}
+            />
+          </div>
+
+          <div>
+            <Input
+                placeholder="Коментар або покликання"
+                value={comment}
+                onChange={changeCommentHandler}
+            />
+
+          </div>
+        </div>
+
+        <div>
+          <Button text="Замовити" isEnable={true} />
+        </div>
+      </Wrapper>
     </>
   );
 }
+
+const Wrapper = styled.div`
+  display: grid;
+  grid-template-columns: 17fr 6fr;
+  grid-gap: 10px;
+  padding-top: 80px;
+  margin-bottom: 120px;
+`;
+
+
+const TextAreaContainerStyled = styled.div`
+  width: 100%;
+  max-width: 660px;
+  position: relative;
+
+`;
+
+const UploadAreaStyled = styled.div`
+  display: ${({isHidden}) => isHidden ? 'none' : 'block'};
+  position: absolute;
+  top: 20px;
+  left: 30px;
+  font-size: 14px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.57;
+  letter-spacing: -.05px;
+`;
+
+const SpanStyled = styled.span`
+  color: #a0a1a4;
+
+`;
+const LableStyled = styled.label`
+  color: #0068e4;
+  cursor: pointer;
+`;
+
+const InputFileStyled = styled.input`
+  display: none;
+`;
+
 
 export default App;

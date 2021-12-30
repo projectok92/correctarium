@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const Input = ({placeholder, value, onChange}) => {
+  const [isActive, setIsActive] = useState(false);
+
   return (
-    <FieldSetStyled>
+    <FieldSetStyled isBlue={isActive}>
       {value !== '' && (
-        <LegendStyled>
+        <LegendStyled isBlue={isActive}>
           {placeholder}
         </LegendStyled>
       )}
@@ -14,6 +16,9 @@ const Input = ({placeholder, value, onChange}) => {
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        onFocus={() => setIsActive(true)}
+        onBlur={() => setIsActive(false)}
+
       />
     
     </FieldSetStyled>
@@ -27,7 +32,8 @@ const FieldSetStyled = styled.fieldset`
   height: 60px;
   padding: 0;
   border-radius: 8px;
-  border: 1px solid #eee;
+  border: ${({ isBlue }) => isBlue ? '1px solid #0068e4' : '1px solid #eee'};
+  transition: border 0.4s;
   outline: none;
   font-size: 14px;
   font-weight: 500;
@@ -67,10 +73,12 @@ const LegendStyled = styled.legend`
   font-style: normal;
   line-height: normal;
   letter-spacing: -.04px;
-  color: #a0a1a4;
+  transition: color 0.4s;
+  color: ${({ isBlue }) => isBlue ? '#0068e4' : '#a0a1a4'};
   margin-left: 22px;
   display: inline-block;
   height: 15px;
+  background-color: #fff;
 
   &:active {
     color: #0068e4;
