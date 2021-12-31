@@ -502,13 +502,12 @@ const GlobalStyle = createGlobalStyle`
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-
   * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     font-family: 'Montserrat', sans-serif;
-
+    color: #1b2235;
   }
 
   body {
@@ -551,61 +550,89 @@ const App = () => {
   return (
     <>
       <GlobalStyle />
-      <Wrapper>
-        <div>
-
-          <TextAreaContainerStyled>
-            <TextArea
-              value={textToEdit}
-              onChange={changeTextToEditHandler}
-            />
-
-            <UploadAreaStyled
-              isHidden={textToEdit !== ''}
-            >
-              <SpanStyled>Введіть текст або </SpanStyled>
-              <LableStyled>завантажте файл
-                <InputFileStyled
-                  type="file"
-                  accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, .rtf, .txt, .pdf, .zip"
-                />
-              </LableStyled>
-
-            </UploadAreaStyled>
-
-          </TextAreaContainerStyled>
-
+      <MainContainerStyled>
+        <Wrapper>
           <div>
-            <Input
-              placeholder="Ваша електронна пошта"
-              value={email}
-              onChange={changeEmailHandler}
-            />
+            <TextAreaContainerStyled>
+              <TextArea
+                value={textToEdit}
+                onChange={changeTextToEditHandler}
+              />
 
-            <Input
-              placeholder="Ваше ім’я"
-              value={name}
-              onChange={changeNameHandler}
-            />
+              <UploadAreaStyled
+                isHidden={textToEdit !== ''}
+              >
+                <SpanStyled>Введіть текст або </SpanStyled>
+                <LableStyled>завантажте файл
+                  <InputFileStyled
+                    type="file"
+                    accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, .rtf, .txt, .pdf, .zip"
+                  />
+                </LableStyled>
+              </UploadAreaStyled>
+            </TextAreaContainerStyled>
+
+            <div>
+              <Input
+                placeholder="Ваша електронна пошта"
+                value={email}
+                onChange={changeEmailHandler}
+              />
+
+              <Input
+                placeholder="Ваше ім’я"
+                value={name}
+                onChange={changeNameHandler}
+              />
+            </div>
+
+            <div>
+              <Input
+                  placeholder="Коментар або покликання"
+                  value={comment}
+                  onChange={changeCommentHandler}
+              />
+
+            </div>
           </div>
 
-          <div>
-            <Input
-                placeholder="Коментар або покликання"
-                value={comment}
-                onChange={changeCommentHandler}
-            />
+          <SubmitDivStyled>
+            <PriceStyled>
+              <NumberStyled>
+                {0}
+              </NumberStyled>
+              <CurrencyStyled>
+                грн
+              </CurrencyStyled>
+            </PriceStyled>
+            <TimeStyled>
+              Здамо&nbsp;за: одну годину
+            </TimeStyled>
 
-          </div>
-        </div>
-
-        <div>
-          <Button text="Замовити" isEnable={true} />
-        </div>
-      </Wrapper>
+            <Button text="Замовити" isEnable={true} />
+          </SubmitDivStyled>
+        </Wrapper>
+      </MainContainerStyled>
     </>
   );
 }
+
+const MainContainerStyled = styled.main`
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    overflow-x: hidden;
+`;
 
 const Wrapper = styled.div`
   display: grid;
@@ -615,6 +642,50 @@ const Wrapper = styled.div`
   margin-bottom: 120px;
 `;
 
+const SubmitDivStyled = styled.div`
+  padding-top: 108px;
+  text-align: right;
+`;
+
+const PriceStyled = styled.div`
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: end;
+  -ms-flex-align: end;
+  align-items: flex-end;
+`;
+
+const NumberStyled = styled.div`
+  margin-left: auto;
+  font-size: 60px;
+  font-weight: 100;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.37;
+  letter-spacing: -.19px;
+  text-align: right;
+  color: #0068e4;
+`;
+
+const CurrencyStyled = styled.div`
+  color: #0068e4;
+  margin-bottom: 13px;
+`;
+
+const TimeStyled = styled.div`
+  width: 100%;
+  height: 24px;
+  font-size: 16px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-align: right;
+  margin-bottom: 30px;
+  color: #1b2235;
+`;
 
 const TextAreaContainerStyled = styled.div`
   width: 100%;
