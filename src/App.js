@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 
 import Button from './components/Button';
+import Dropdown from './components/Dropdown';
 import Input from './components/Input';
 import TextArea from './components/TextArea';
 
@@ -553,6 +554,24 @@ const App = () => {
       <MainContainerStyled>
         <Wrapper>
           <div>
+            <MediumHeader>
+              Замовити переклад або редагування
+            </MediumHeader>
+
+            <Dropdown
+              placeholder="Послуга"
+              variants={[
+                {
+                  id: 'editing',
+                  text: 'Редагування',
+                },
+                {
+                  id: 'proofreading',
+                  text: 'Переклад',
+                },
+              ]}
+            />
+
             <TextAreaContainerStyled>
               <TextArea
                 value={textToEdit}
@@ -592,7 +611,6 @@ const App = () => {
                   value={comment}
                   onChange={changeCommentHandler}
               />
-
             </div>
           </div>
 
@@ -640,6 +658,19 @@ const Wrapper = styled.div`
   grid-gap: 10px;
   padding-top: 80px;
   margin-bottom: 120px;
+`;
+
+const MediumHeader = styled.h3`
+  width: 100%;
+  margin-bottom: 70px;
+  font-size: 30px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.47;
+  letter-spacing: normal;
+  margin: 0;
+  max-width: 100%;
 `;
 
 const SubmitDivStyled = styled.div`

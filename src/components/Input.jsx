@@ -46,6 +46,7 @@ const FieldSetStyled = styled.fieldset`
 const InputStyled = styled.input`
   width: 315px;
   height: 60px;
+  margin: 0 0 30px;
   background: rgba(0,0,0,0);
   line-height: 22px;
   padding: 19px 20px;
