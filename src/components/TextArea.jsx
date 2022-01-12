@@ -21,7 +21,7 @@ const TextAreaStyled = styled.textarea`
     border: 1px solid #eee;
     outline: none;
     padding: 20px 30px;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     overflow: auto;
 `;
 

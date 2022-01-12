@@ -31,6 +31,7 @@ const FieldSetStyled = styled.fieldset`
   width: 345px;
   height: 60px;
   padding: 0;
+  margin-bottom: 30px;
   border-radius: 8px;
   border: ${({ isBlue }) => isBlue ? '1px solid #0068e4' : '1px solid #eee'};
   transition: border 0.4s;

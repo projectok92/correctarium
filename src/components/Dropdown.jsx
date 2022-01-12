@@ -3,18 +3,22 @@ import styled from 'styled-components';
 
 import arrow from '../assets/img/arrow_down.svg';
 
-const Dropdown = ({placeholder, value, onChange, variants}) => {
+const Dropdown = ({placeholder, value, onChange, variants, id}) => {
   const [isActive, setIsActive] = useState(false);
   const [isOpened, setIsOpened] = useState(false);
-  const [isSelected, setIsSelected] = useState(false);
 
   const openDropdownHandler = () => {
     if (isOpened) {
       setIsOpened(false);
-    } else {
+    } else if (variants) {
       setIsOpened(true);
     }
 
+  };
+
+  const chooseVariantHandler = (variant) => {
+    onChange(variant);
+    setIsOpened(false);
   };
 
   return (
@@ -27,23 +31,35 @@ const Dropdown = ({placeholder, value, onChange, variants}) => {
 
       <CheckBoxStyled
         type="checkbox"
-        id="opener"
+        id={`opener_${id}`}
         onChange={openDropdownHandler}
       />
       <LableStyled
-        htmlFor="opener"
-        placeholder={placeholder}
+        htmlFor={`opener_${id}`}
+        isValue={!!value}
         onFocus={() => setIsActive(true)}
         onBlur={() => setIsActive(false)}
       >
-        <ImgStyled src={arrow} alt="dropdown arrow" />
+        {value ? value.text : placeholder}
+        <ImgStyled
+          src={arrow}
+          alt="dropdown arrow"
+          isOpened={isOpened}
+        />
       </LableStyled>
 
       {isOpened && (
         <SelectorListStyled>
           {variants.map((variant) => (
-            <LableOptionStyled htmlFor={variant.id}>
-              <OptionStyled id={variant.id} />
+            <LableOptionStyled
+             htmlFor={variant.id}
+             key={variant.id}
+             >
+              <OptionStyled 
+                id={variant.id} 
+                type="radio"
+                onChange={() => chooseVariantHandler(variant)}
+              />
               {variant.text}
             </LableOptionStyled>
           ))}
@@ -93,13 +109,16 @@ const LableStyled = styled.label`
   font-style: normal;
   line-height: 1.57;
   letter-spacing: -.05px;
-  color: ${({ isBlue }) => isBlue ? '#0068e4' : '#a0a1a4'};
+  color: #1b2235;
+  color: ${({ isValue }) => isValue ? '#1b2235' : '#a0a1a4'};
 `;
 
 const ImgStyled = styled.img`
   width: 8px;
   height: 8px;
   margin: auto 0 auto auto;
+  transform: ${({ isOpened }) => isOpened ? 'rotate(180deg)' : 'rotate(0deg)'};
+  
 `;
 
 const LegendStyled = styled.legend`
@@ -146,6 +165,10 @@ const SelectorListStyled = styled.div`
 const LableOptionStyled = styled.label`
   cursor: pointer;
   padding: 0 20px;
+  
+  &:hover {
+    background: #eee;
+  }
 `;
 
 const OptionStyled = styled.input`

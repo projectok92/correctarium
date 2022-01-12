@@ -518,11 +518,55 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
+const proofreadingOptions = [
+  {
+    id: 'ukr',
+    text: 'Українська',
+  },
+  {
+    id: 'rus',
+    text: 'Російська',
+  },
+  {
+    id: 'eng',
+    text: 'Англійська',
+  },
+  {
+    id: 'eng_nat',
+    text: 'Англійська (носій)',
+  },
+];
+
+const translatingOptions = [
+  {
+    id: 'ukrrus_eng',
+    text: 'Українська/російська — англійська',
+  },
+  {
+    id: 'eng_ukr',
+    text: 'Англійська — українська',
+  },
+  {
+    id: 'eng_rus',
+    text: 'Англійська — російська',
+  },
+  {
+    id: 'rus_ukr',
+    text: 'Російська — українська',
+  },
+  {
+    id: 'ukr_rus',
+    text: 'Українська — російська',
+  },
+];
+
 const App = () => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [comment, setComment] = useState('');
   const [textToEdit, setTextToEdit] = useState('');
+  const [serviceType, setServiceType] = useState();
+  const [language, setLanguage] = useState();
 
   const changeEmailHandler = (e) => {
     const element = e.target;
@@ -547,13 +591,28 @@ const App = () => {
     const value = element.value;
     setTextToEdit(value);
   }
+
+  const defineOptionsToShow = () => {
+    if (!serviceType) {
+      return null;
+    }
+
+    switch (serviceType.id) {
+      case 'proofreading':
+        return proofreadingOptions;
+      case 'translation':
+        return translatingOptions;
+      default:
+        return proofreadingOptions;
+    }
+  }
   
   return (
     <>
       <GlobalStyle />
       <MainContainerStyled>
         <Wrapper>
-          <div>
+          <Form>
             <MediumHeader>
               Замовити переклад або редагування
             </MediumHeader>
@@ -562,14 +621,20 @@ const App = () => {
               placeholder="Послуга"
               variants={[
                 {
-                  id: 'editing',
+                  id: 'proofreading',
                   text: 'Редагування',
                 },
                 {
-                  id: 'proofreading',
+                  id: 'translation',
                   text: 'Переклад',
                 },
               ]}
+              id="services"
+              onChange={(type) => {
+                setServiceType(type);
+                setLanguage(undefined);
+              }}
+              value={serviceType}
             />
 
             <TextAreaContainerStyled>
@@ -591,7 +656,7 @@ const App = () => {
               </UploadAreaStyled>
             </TextAreaContainerStyled>
 
-            <div>
+            <InputsContainer>
               <Input
                 placeholder="Ваша електронна пошта"
                 value={email}
@@ -603,16 +668,21 @@ const App = () => {
                 value={name}
                 onChange={changeNameHandler}
               />
-            </div>
 
-            <div>
               <Input
                   placeholder="Коментар або покликання"
                   value={comment}
                   onChange={changeCommentHandler}
               />
-            </div>
-          </div>
+
+              <Dropdown
+                placeholder={serviceType && serviceType.id === 'translation' ? 'Мовна пара' : 'Мова' }
+                variants={defineOptionsToShow()}
+                onChange={(lang) => setLanguage(lang)}
+                value={language}
+              />
+            </InputsContainer>
+          </Form>
 
           <SubmitDivStyled>
             <PriceStyled>
@@ -653,11 +723,30 @@ const MainContainerStyled = styled.main`
 `;
 
 const Wrapper = styled.div`
-  display: grid;
-  grid-template-columns: 17fr 6fr;
-  grid-gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-content: center;
+  width: 100%;
+  max-width: 1280px;
   padding-top: 80px;
+  padding-right: 60px;
+  padding-left: 60px;
   margin-bottom: 120px;
+`;
+
+const Form = styled.div`
+  width: 100%;
+  max-width: 850px;
+`;
+
+const InputsContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 720px;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const MediumHeader = styled.h3`
@@ -669,7 +758,6 @@ const MediumHeader = styled.h3`
   font-style: normal;
   line-height: 1.47;
   letter-spacing: normal;
-  margin: 0;
   max-width: 100%;
 `;
 
@@ -722,7 +810,6 @@ const TextAreaContainerStyled = styled.div`
   width: 100%;
   max-width: 660px;
   position: relative;
-
 `;
 
 const UploadAreaStyled = styled.div`
@@ -750,6 +837,5 @@ const LableStyled = styled.label`
 const InputFileStyled = styled.input`
   display: none;
 `;
-
 
 export default App;
