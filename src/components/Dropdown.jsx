@@ -22,7 +22,12 @@ const Dropdown = ({placeholder, value, onChange, variants, id}) => {
   };
 
   return (
-    <FieldSetStyled isBlue={isActive}>
+    <FieldSetStyled 
+      isBlue={isActive}
+      onFocus={() => setIsActive(true)}
+      onBlur={() => setIsActive(false)}
+      tabIndex={0}
+    >
       {value !== '' && value && (
         <LegendStyled isBlue={isActive}>
           {placeholder}
@@ -37,8 +42,6 @@ const Dropdown = ({placeholder, value, onChange, variants, id}) => {
       <LableStyled
         htmlFor={`opener_${id}`}
         isValue={!!value}
-        onFocus={() => setIsActive(true)}
-        onBlur={() => setIsActive(false)}
       >
         {value ? value.text : placeholder}
         <ImgStyled
@@ -131,15 +134,11 @@ const LegendStyled = styled.legend`
   line-height: normal;
   letter-spacing: -.04px;
   transition: color 0.4s;
-  color: ${({ isBlue }) => isBlue ? '#0068e4' : '#a0a1a4'};
+  color: #a0a1a4;
   margin-left: 22px;
   display: inline-block;
   height: 15px;
   background-color: #fff;
-
-  &:active {
-    color: #0068e4;
-  }
 `;
 
 const SelectorListStyled = styled.div`
