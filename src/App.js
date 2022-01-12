@@ -751,7 +751,7 @@ const InputsContainer = styled.div`
 
 const MediumHeader = styled.h3`
   width: 100%;
-  margin-bottom: 70px;
+  margin-bottom: 78px;
   font-size: 30px;
   font-weight: 500;
   font-stretch: normal;
