@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 
 import Button from './components/Button';
@@ -567,6 +567,31 @@ const App = () => {
   const [textToEdit, setTextToEdit] = useState('');
   const [serviceType, setServiceType] = useState();
   const [language, setLanguage] = useState();
+  const [fileExtention, setFileExtention] = useState();
+  const [buttonIsActive, setButtonIsActive] = useState(false);
+  const [price, setPrice] = useState(0);
+  const [deadline, setDeadline] = useState();
+
+  // For  check is button active
+  useEffect(() => {
+    if (email.length > 4 && name.length > 0
+      && serviceType && language
+      && (textToEdit.length > 0 || fileExtention)) {
+      setButtonIsActive(true);
+    } else {
+      setButtonIsActive(false);
+    }
+
+  }, [email, name, textToEdit, serviceType, language, fileExtention]);
+
+  // For calculation prace and deadline
+  useEffect(() => {
+    if ((textToEdit.length > 0 || fileExtention)
+      && serviceType && language) {
+        priceCalc();
+        // deadlineCalc();
+    }
+  }, [textToEdit, serviceType, language, fileExtention]);
 
   const changeEmailHandler = (e) => {
     const element = e.target;
@@ -605,6 +630,54 @@ const App = () => {
       default:
         return proofreadingOptions;
     }
+  }
+
+  //Calculations
+  const extensionsList = ['doc', 'docx', 'rtf'];
+
+  const extractFileExtention = (e) => {
+    const uploadedFile = e.target.files[0];
+    const uploadedName = uploadedFile.name;
+    const fileType = uploadedName.split('.')[uploadedName.split('.').length - 1];
+    setFileExtention(fileType);
+
+    // const reader = new FileReader();
+    // reader.onload = () => setUploadedFileText(reader.result);
+  };
+
+  const priceCalc = () => {
+    const pricePerChar = language.id.includes('eng') ? 0.12 : 0.05;
+
+    let finalPrice = Math.ceil(textToEdit.length * pricePerChar);
+
+    if (pricePerChar === 0.12 && finalPrice < 120) {
+      finalPrice = 120;
+    } else if (pricePerChar === 0.05 && finalPrice < 50) {
+      finalPrice = 50;
+    }
+
+    if (fileExtention && !extensionsList.includes(fileExtention)) {
+      finalPrice = finalPrice + (finalPrice * 0.2);
+    }
+    
+    setPrice(finalPrice);
+  }
+
+  const hoursCalc = () => {
+    const charsPerHour = language.id.includes('eng') ? 333 : 1333;
+
+    let totalHours = ((0.5 + Math.ceil(2 * (textToEdit.length / charsPerHour)) / 2));
+
+    if (textToEdit.length <= charsPerHour) {
+      totalHours = 1;
+    }
+
+    if (fileExtention && !extensionsList.includes(fileExtention)) {
+      totalHours = totalHours + Math.ceil(2 * (totalHours * 0.2) / 2);
+    }
+    
+    console.log(totalHours);
+    return totalHours;
   }
   
   return (
@@ -649,8 +722,10 @@ const App = () => {
                 <SpanStyled>Введіть текст або </SpanStyled>
                 <LableStyled>завантажте файл
                   <InputFileStyled
+                    id="uploadedFile"
                     type="file"
                     accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel,application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, .rtf, .txt, .pdf, .zip"
+                    onChange={extractFileExtention}
                   />
                 </LableStyled>
               </UploadAreaStyled>
@@ -687,7 +762,7 @@ const App = () => {
           <SubmitDivStyled>
             <PriceStyled>
               <NumberStyled>
-                {0}
+                {price}
               </NumberStyled>
               <CurrencyStyled>
                 грн
@@ -697,7 +772,10 @@ const App = () => {
               Здамо&nbsp;за: одну годину
             </TimeStyled>
 
-            <Button text="Замовити" isEnable={true} />
+            <Button
+              text="Замовити"
+              isEnable={buttonIsActive}
+            />
           </SubmitDivStyled>
         </Wrapper>
       </MainContainerStyled>

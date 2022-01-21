@@ -25,7 +25,10 @@ const Dropdown = ({placeholder, value, onChange, variants, id}) => {
     <FieldSetStyled 
       isBlue={isActive}
       onFocus={() => setIsActive(true)}
-      onBlur={() => setIsActive(false)}
+      onBlur={() => {
+        setIsActive(false);
+        setIsOpened(false);
+      }}
       tabIndex={0}
     >
       {value !== '' && value && (

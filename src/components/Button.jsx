@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Button = ({text, isEnable}) => {
   return (
-    <ButtonStyled disabled={isEnable}>
+    <ButtonStyled disabled={!isEnable}>
       {text}
     </ButtonStyled>
   );
