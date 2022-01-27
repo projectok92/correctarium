@@ -570,6 +570,7 @@ const App = () => {
   const [fileExtention, setFileExtention] = useState();
   const [buttonIsActive, setButtonIsActive] = useState(false);
   const [price, setPrice] = useState(0);
+  const [time, setTime] = useState();
   const [deadline, setDeadline] = useState();
 
   // For  check is button active
@@ -589,9 +590,15 @@ const App = () => {
     if ((textToEdit.length > 0 || fileExtention)
       && serviceType && language) {
         priceCalc();
-        // deadlineCalc();
+        timeCalc();
     }
   }, [textToEdit, serviceType, language, fileExtention]);
+
+  useEffect(() => {
+    if (time) {
+      deadlineCalc();
+    }
+  }, [time]);
 
   const changeEmailHandler = (e) => {
     const element = e.target;
@@ -663,22 +670,123 @@ const App = () => {
     setPrice(finalPrice);
   }
 
-  const hoursCalc = () => {
+  const timeCalc = () => {
     const charsPerHour = language.id.includes('eng') ? 333 : 1333;
 
-    let totalHours = ((0.5 + Math.ceil(2 * (textToEdit.length / charsPerHour)) / 2));
+    let totalTime = ((0.5 + Math.ceil(2 * (textToEdit.length / charsPerHour)) / 2));
 
-    if (textToEdit.length <= charsPerHour) {
-      totalHours = 1;
+    if (textToEdit.length < charsPerHour) {
+      totalTime = 1;
     }
 
     if (fileExtention && !extensionsList.includes(fileExtention)) {
-      totalHours = totalHours + Math.ceil(2 * (totalHours * 0.2) / 2);
+      totalTime = totalTime + Math.ceil(2 * (totalTime * 0.2) / 2);
     }
     
-    console.log(totalHours);
-    return totalHours;
+    setTime(totalTime);
   }
+
+  const roundedCurDateAndTime = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const dd = date.getDate();
+    const hh = date.getMinutes() > 30 ? date.getHours() + 1 : date.getHours();
+    const mm = (date.getMinutes() >= 1 && date.getMinutes() <= 30) ? 30 : 0;
+
+    return new Date(year, month, dd, hh, mm);
+  }
+
+  const deadlineCalc = () => {
+    const timeNeededForWork = time;
+    const workingHours = 9;
+    let hoursToAdd;
+    let minutesToAdd;
+    let businessDaysToAdd = Math.floor(timeNeededForWork / workingHours);;
+    let businessWeeksToAdd = 0;
+
+    if (businessDaysToAdd >= 5) {
+      businessWeeksToAdd = Math.floor(businessDaysToAdd / 5);
+      businessDaysToAdd = businessDaysToAdd % 5;
+    }
+
+    if (timeNeededForWork === Math.round(timeNeededForWork)) {
+      hoursToAdd = timeNeededForWork;
+      minutesToAdd = 0;
+    } else {
+      hoursToAdd = Math.floor(timeNeededForWork);
+      minutesToAdd = 30;
+    }
+
+    hoursToAdd = Math.floor(timeNeededForWork % workingHours);
+
+    let date = roundedCurDateAndTime();
+
+    console.log('\b');
+    // console.log('Rounded current Date And Time: ' + date);
+
+    const thisDay = date.getDay();
+
+    //If task came on weekend
+    thisDay === 0 && date.setDate(date.getDate() + 1) && date.setHours(10) && date.setMinutes(0);
+    thisDay === 6 && date.setDate(date.getDate() + 2) && date.setHours(10) && date.setMinutes(0);
+    thisDay === 5 && date.getHours() >= 19 && date.setDate(date.getDate() + 3) && date.setHours(10) && date.setMinutes(0);
+
+    const businessDaysToAddWithWeekend = thisDay + businessDaysToAdd >= 7 ? businessDaysToAdd + 2 : businessDaysToAdd;
+    date.setDate(date.getDate() + (businessWeeksToAdd * 7) + businessDaysToAddWithWeekend);
+
+    // console.log('On what day deadline is. Whithout  extra hours: ' + date);
+    
+    if ((date.getHours() + hoursToAdd) <= 19) {
+      console.log('here!!!');
+      console.log((date.getHours() + hoursToAdd));
+
+      date.setHours(date.getHours() + hoursToAdd);
+      date.setMinutes(date.getMinutes() + minutesToAdd);
+
+      if (date.getHours() === 19 && date.getMinutes() === 30) {
+        date.setDate(date.getDate() + 1);
+        date.setHours(10);
+        date.setMinutes(30);
+      }
+
+      if (date.getHours() === 20) {
+        date.setDate(date.getDate() + 1);
+        date.setHours(11);
+        date.setMinutes(0);
+      }
+
+    } else if (((date.getHours() + hoursToAdd) > 19) && ((date.getHours() + hoursToAdd) < 24)) {
+      date.setDate(date.getDate() + 1);
+      date.setHours(10 + (date.getHours() + hoursToAdd - 19));
+      date.setMinutes(date.getMinutes() + minutesToAdd);
+    }
+    
+    date.getDay() === 6 && date.setDate(date.getDate() + 2);  // Could be!
+  
+    console.log('Time: ' + time);
+    console.log('Business Weeks To Add: ' +  businessWeeksToAdd);
+    console.log('Business Days To Add: ' +  businessDaysToAdd);
+    console.log('Hours to add: ' + hoursToAdd);
+    console.log('Minutes to add: ' + minutesToAdd);
+    console.log('Deadline: ' + date);
+
+    setDeadline(`${date}`);
+
+  }
+
+    // const deadlineFormating = () => {
+      // if (date.getHours() >= 10 && (date.getHours() + timeNeededForWork) <= 19) {
+      //   if (timeNeededForWork === 1) {
+      //     setDeadline(`Здамо за: одну годину`);
+      //   } else if (timeNeededForWork > 1 && timeNeededForWork <= 2) {
+      //     setDeadline(`Здамо за: дві години`);
+      //   } else if (timeNeededForWork > 2 && timeNeededForWork <= 3) {
+      //     setDeadline(`Здамо за: три години`);
+      //   }
+      // }
+
+    // }
   
   return (
     <>
@@ -769,7 +877,7 @@ const App = () => {
               </CurrencyStyled>
             </PriceStyled>
             <TimeStyled>
-              Здамо&nbsp;за: одну годину
+              {deadline}
             </TimeStyled>
 
             <Button
