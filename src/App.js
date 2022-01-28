@@ -596,7 +596,7 @@ const App = () => {
 
   useEffect(() => {
     if (time) {
-      deadlineCalc();
+      deadlineFormating();
     }
   }, [time]);
 
@@ -721,10 +721,6 @@ const App = () => {
     hoursToAdd = Math.floor(timeNeededForWork % workingHours);
 
     let date = roundedCurDateAndTime();
-
-    console.log('\b');
-    // console.log('Rounded current Date And Time: ' + date);
-
     const thisDay = date.getDay();
 
     //If task came on weekend
@@ -734,12 +730,8 @@ const App = () => {
 
     const businessDaysToAddWithWeekend = thisDay + businessDaysToAdd >= 7 ? businessDaysToAdd + 2 : businessDaysToAdd;
     date.setDate(date.getDate() + (businessWeeksToAdd * 7) + businessDaysToAddWithWeekend);
-
-    // console.log('On what day deadline is. Whithout  extra hours: ' + date);
     
     if ((date.getHours() + hoursToAdd) <= 19) {
-      console.log('here!!!');
-      console.log((date.getHours() + hoursToAdd));
 
       date.setHours(date.getHours() + hoursToAdd);
       date.setMinutes(date.getMinutes() + minutesToAdd);
@@ -762,31 +754,48 @@ const App = () => {
       date.setMinutes(date.getMinutes() + minutesToAdd);
     }
     
-    date.getDay() === 6 && date.setDate(date.getDate() + 2);  // Could be!
+    date.getDay() === 6 && date.setDate(date.getDate() + 2);
   
-    console.log('Time: ' + time);
-    console.log('Business Weeks To Add: ' +  businessWeeksToAdd);
-    console.log('Business Days To Add: ' +  businessDaysToAdd);
-    console.log('Hours to add: ' + hoursToAdd);
-    console.log('Minutes to add: ' + minutesToAdd);
-    console.log('Deadline: ' + date);
+    // console.log('Time: ' + time);
+    // console.log('Business Weeks To Add: ' +  businessWeeksToAdd);
+    // console.log('Business Days To Add: ' +  businessDaysToAdd);
+    // console.log('Hours to add: ' + hoursToAdd);
+    // console.log('Minutes to add: ' + minutesToAdd);
+    // console.log('Deadline: ' + date);
 
-    setDeadline(`${date}`);
-
+    return date;
   }
 
-    // const deadlineFormating = () => {
-      // if (date.getHours() >= 10 && (date.getHours() + timeNeededForWork) <= 19) {
-      //   if (timeNeededForWork === 1) {
-      //     setDeadline(`Здамо за: одну годину`);
-      //   } else if (timeNeededForWork > 1 && timeNeededForWork <= 2) {
-      //     setDeadline(`Здамо за: дві години`);
-      //   } else if (timeNeededForWork > 2 && timeNeededForWork <= 3) {
-      //     setDeadline(`Здамо за: три години`);
-      //   }
-      // }
+  const deadlineFormating = () => {
+    const currentDateAndTime = roundedCurDateAndTime();
+    const deadlineDateAndTime = deadlineCalc();
 
-    // }
+    const timeDifference = (deadlineDateAndTime - currentDateAndTime) / 60 / 60 / 1000;
+    console.log('Difference: ' + timeDifference);
+
+    if (currentDateAndTime.getHours() >= 10 && ((currentDateAndTime.getHours() + timeDifference) <= 19 && timeDifference <= 3)) {
+      console.log();
+      if (timeDifference === 1) {
+        setDeadline('Здамо за: одну годину');
+      }else if (timeDifference > 1 && timeDifference <= 1.5) {
+        setDeadline('Здамо за: півтори години');
+      } else if (timeDifference > 1.5 && timeDifference <= 2) {
+        setDeadline('Здамо за: дві години');
+      } else if (timeDifference > 2 && timeDifference <= 2.5) {
+        setDeadline('Здамо за: дві з половиною години');
+      } else if (timeDifference > 2.5 && timeDifference <= 3) {
+        setDeadline('Здамо за: три години');
+      }
+    } else {
+      const dd = deadlineDateAndTime.getDate() < 10 ? `0${deadlineDateAndTime.getDate()}` : deadlineDateAndTime.getDate();
+      const mm = deadlineDateAndTime.getMonth() + 1 < 10 ? `0${deadlineDateAndTime.getMonth() + 1}` : deadlineDateAndTime.getMonth() + 1;
+      const yy = `${deadlineDateAndTime.getFullYear()}`.slice(-2);
+      const h = deadlineDateAndTime.getHours();
+      const m = deadlineDateAndTime.getMinutes() === 0 ? '00' : '30';
+
+      setDeadline(`Термін здавання: ${dd}.${mm}.${yy} о ${h}:${m}`);
+    }
+  } 
   
   return (
     <>
