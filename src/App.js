@@ -591,6 +591,10 @@ const App = () => {
       && serviceType && language) {
         priceCalc();
         timeCalc();
+    } else {
+      setTime(undefined);
+      setDeadline(undefined);
+      setPrice(0)
     }
   }, [textToEdit, serviceType, language, fileExtention]);
 
