@@ -604,25 +604,25 @@ const App = () => {
     const element = e.target;
     const value = element.value;
     setEmail(value);
-  }
+  };
 
   const changeNameHandler = (e) => {
     const element = e.target;
     const value = element.value;
     setName(value);
-  }
+  };
 
   const changeCommentHandler = (e) => {
     const element = e.target;
     const value = element.value;
     setComment(value);
-  }
+  };
 
   const changeTextToEditHandler = (e) => {
     const element = e.target;
     const value = element.value;
     setTextToEdit(value);
-  }
+  };
 
   const defineOptionsToShow = () => {
     if (!serviceType) {
@@ -637,7 +637,7 @@ const App = () => {
       default:
         return proofreadingOptions;
     }
-  }
+  };
 
   //Calculations
   const extensionsList = ['doc', 'docx', 'rtf'];
@@ -668,7 +668,7 @@ const App = () => {
     }
     
     setPrice(finalPrice);
-  }
+  };
 
   const timeCalc = () => {
     const charsPerHour = language.id.includes('eng') ? 333 : 1333;
@@ -684,7 +684,7 @@ const App = () => {
     }
     
     setTime(totalTime);
-  }
+  };
 
   const roundedCurDateAndTime = () => {
     const date = new Date();
@@ -695,7 +695,7 @@ const App = () => {
     const mm = (date.getMinutes() >= 1 && date.getMinutes() <= 30) ? 30 : 0;
 
     return new Date(year, month, dd, hh, mm);
-  }
+  };
 
   const deadlineCalc = () => {
     const timeNeededForWork = time;
@@ -755,16 +755,9 @@ const App = () => {
     }
     
     date.getDay() === 6 && date.setDate(date.getDate() + 2);
-  
-    // console.log('Time: ' + time);
-    // console.log('Business Weeks To Add: ' +  businessWeeksToAdd);
-    // console.log('Business Days To Add: ' +  businessDaysToAdd);
-    // console.log('Hours to add: ' + hoursToAdd);
-    // console.log('Minutes to add: ' + minutesToAdd);
-    // console.log('Deadline: ' + date);
 
     return date;
-  }
+  };
 
   const deadlineFormating = () => {
     const currentDateAndTime = roundedCurDateAndTime();
@@ -795,7 +788,7 @@ const App = () => {
 
       setDeadline(`Термін здавання: ${dd}.${mm}.${yy} о ${h}:${m}`);
     }
-  } 
+  };
   
   return (
     <>
@@ -898,7 +891,7 @@ const App = () => {
       </MainContainerStyled>
     </>
   );
-}
+};
 
 const MainContainerStyled = styled.main`
     display: -webkit-box;
