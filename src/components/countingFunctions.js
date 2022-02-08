@@ -1,12 +1,12 @@
-export const isExtencionInList = (fileExtention) => {
+const isExtencionInList = (fileExtention) => {
   const extensionsList = ['doc', 'docx', 'rtf'];
   return extensionsList.includes(fileExtention);
 };
 
-export const priceCalc = (language, textToEdit, fileExtention) => {
-  const pricePerChar = language.id.includes('eng') ? 0.12 : 0.05;
+const priceCalc = (language, textLength, fileExtention) => {
+  const pricePerChar = language.includes('eng') ? 0.12 : 0.05;
 
-  let finalPrice = Math.ceil(textToEdit.length * pricePerChar);
+  let finalPrice = Math.ceil(textLength * pricePerChar);
 
   if (pricePerChar === 0.12 && finalPrice < 120) {
     finalPrice = 120;
@@ -15,29 +15,29 @@ export const priceCalc = (language, textToEdit, fileExtention) => {
   }
 
   if (fileExtention && !isExtencionInList(fileExtention)) {
-    finalPrice = finalPrice + (finalPrice * 0.2);
+    finalPrice = Math.ceil(finalPrice + (finalPrice * 0.2));
   }
   
   return finalPrice;
 };
 
-export const timeCalc = (language, textToEdit, fileExtention) => {
-  const charsPerHour = language.id.includes('eng') ? 333 : 1333;
+const timeCalc = (language, textLength, fileExtention) => {
+  const charsPerHour = language.includes('eng') ? 333 : 1333;
 
-  let totalTime = ((0.5 + Math.ceil(2 * (textToEdit.length / charsPerHour)) / 2));
+  let totalTime = ((0.5 + Math.ceil(2 * (textLength / charsPerHour)) / 2));
 
-  if (textToEdit.length < charsPerHour) {
+  if (textLength < charsPerHour) {
     totalTime = 1;
   }
 
   if (fileExtention && !isExtencionInList(fileExtention)) {
-    totalTime = totalTime + Math.ceil(2 * (totalTime * 0.2) / 2);
+    totalTime = totalTime + Math.ceil(2 * (totalTime * 0.2)) / 2;
   }
   
   return totalTime;
 };
 
-export const roundedCurDateAndTime = () => {
+const roundedCurDateAndTime = () => {
   const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -48,7 +48,7 @@ export const roundedCurDateAndTime = () => {
   return new Date(year, month, dd, hh, mm);
 };
 
-export const deadlineCalc = (time) => {
+const deadlineCalc = (time) => {
   const timeNeededForWork = time;
   const workingHours = 9;
   let hoursToAdd;
@@ -110,12 +110,11 @@ export const deadlineCalc = (time) => {
   return date;
 };
 
-export const deadlineFormating = (time) => {
+const deadlineFormating = (time) => {
   const currentDateAndTime = roundedCurDateAndTime();
   const deadlineDateAndTime = deadlineCalc(time);
 
   const timeDifference = (deadlineDateAndTime - currentDateAndTime) / 60 / 60 / 1000;
-  console.log('Difference: ' + timeDifference);
 
   if (currentDateAndTime.getHours() >= 10 && ((currentDateAndTime.getHours() + timeDifference) <= 19 && timeDifference <= 3)) {
     console.log();
@@ -140,3 +139,5 @@ export const deadlineFormating = (time) => {
     return `Термін здавання: ${dd}.${mm}.${yy} о ${h}:${m}`;
   }
 };
+
+export { isExtencionInList, priceCalc, timeCalc, roundedCurDateAndTime, deadlineCalc, deadlineFormating }

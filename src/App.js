@@ -591,8 +591,8 @@ const App = () => {
   useEffect(() => {
     if ((textToEdit.length > 0 || fileExtention)
       && serviceType && language) {
-        setPrice(priceCalc(language, textToEdit, fileExtention));
-        setTime(timeCalc(language, textToEdit, fileExtention));
+        setPrice(priceCalc(language.id, textToEdit.length, fileExtention));
+        setTime(timeCalc(language.id, textToEdit.length, fileExtention));
     } else {
       setTime(undefined);
       setDeadline(undefined);
