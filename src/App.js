@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 
-import { priceCalc, timeCalc, deadlineCalc, deadlineFormating } from './components/countingFunctions'
+import { priceCalc, timeCalc, deadlineFormating } from './components/countingFunctions'
 
 import Button from './components/Button';
 import Dropdown from './components/Dropdown';
@@ -602,7 +602,7 @@ const App = () => {
 
   useEffect(() => {
     if (time) {
-      setDeadline(deadlineFormating(time));
+      setDeadline(deadlineFormating(time, new Date()));
     }
   }, [time]);
 

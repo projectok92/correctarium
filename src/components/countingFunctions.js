@@ -37,8 +37,7 @@ const timeCalc = (language, textLength, fileExtention) => {
   return totalTime;
 };
 
-const roundedCurDateAndTime = () => {
-  const date = new Date();
+const roundedCurDateAndTime = (date) => {
   const year = date.getFullYear();
   const month = date.getMonth();
   const dd = date.getDate();
@@ -48,7 +47,7 @@ const roundedCurDateAndTime = () => {
   return new Date(year, month, dd, hh, mm);
 };
 
-const deadlineCalc = (time) => {
+const deadlineCalc = (time, startDate) => {
   const timeNeededForWork = time;
   const workingHours = 9;
   let hoursToAdd;
@@ -71,7 +70,7 @@ const deadlineCalc = (time) => {
 
   hoursToAdd = Math.floor(timeNeededForWork % workingHours);
 
-  let date = roundedCurDateAndTime();
+  let date = roundedCurDateAndTime(startDate);
   const thisDay = date.getDay();
 
   //If task came on weekend
@@ -110,9 +109,9 @@ const deadlineCalc = (time) => {
   return date;
 };
 
-const deadlineFormating = (time) => {
-  const currentDateAndTime = roundedCurDateAndTime();
-  const deadlineDateAndTime = deadlineCalc(time);
+const deadlineFormating = (time, startDate) => {
+  const currentDateAndTime = roundedCurDateAndTime(startDate);
+  const deadlineDateAndTime = deadlineCalc(time, startDate);
 
   const timeDifference = (deadlineDateAndTime - currentDateAndTime) / 60 / 60 / 1000;
 
