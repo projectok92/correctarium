@@ -73,6 +73,9 @@ const deadlineCalc = (time, startDate) => {
   let date = roundedCurDateAndTime(startDate);
   const thisDay = date.getDay();
 
+  //If task came after 19:00
+  date.getHours() >= 19 && date.setDate(date.getDate() + 1) && date.setHours(10) && date.setMinutes(0);
+
   //If task came on weekend
   thisDay === 0 && date.setDate(date.getDate() + 1) && date.setHours(10) && date.setMinutes(0);
   thisDay === 6 && date.setDate(date.getDate() + 2) && date.setHours(10) && date.setMinutes(0);
@@ -116,7 +119,6 @@ const deadlineFormating = (time, startDate) => {
   const timeDifference = (deadlineDateAndTime - currentDateAndTime) / 60 / 60 / 1000;
 
   if (currentDateAndTime.getHours() >= 10 && ((currentDateAndTime.getHours() + timeDifference) <= 19 && timeDifference <= 3)) {
-    console.log();
     if (timeDifference === 1) {
       return 'Здамо за: одну годину';
     }else if (timeDifference > 1 && timeDifference <= 1.5) {
