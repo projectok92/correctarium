@@ -108,6 +108,7 @@ describe('deadlineFormating', () => {
   ${5.5}      | ${new Date("Wed, 2022-02-09, 18:22")}      |  ${"Термін здавання: 10.02.22 о 15:00"}
   ${3}        | ${new Date("Thu, 2022-02-10, 19:55")}      |  ${"Термін здавання: 11.02.22 о 13:00"}
   ${1}        | ${new Date("Thu, 2022-02-10, 22:55")}      |  ${"Термін здавання: 11.02.22 о 11:00"}
+  ${11.5}     | ${new Date("Thu, 2022-02-10, 22:55")}      |  ${"Термін здавання: 14.02.22 о 12:30"}
 
   `('deadlineFormating__table', ({ time, startDate, result }) => {
       expect(deadlineFormating(time, startDate)).toStrictEqual(result);
