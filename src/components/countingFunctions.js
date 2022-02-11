@@ -73,7 +73,8 @@ const deadlineCalc = (time, startDate) => {
   let date = roundedCurDateAndTime(startDate);
   const thisDay = date.getDay();
 
-  //If task came after 19:00
+  //If task comes before 10:00 and after 19:00
+  date.getHours() <10 && date.setHours(10) && date.setMinutes(0);
   date.getHours() >= 19 && date.setDate(date.getDate() + 1) && date.setHours(10) && date.setMinutes(0);
 
   //If task came on weekend
