@@ -71,13 +71,20 @@ const deadlineCalc = (time, startDate) => {
   hoursToAdd = Math.floor(timeNeededForWork % workingHours);
 
   let date = roundedCurDateAndTime(startDate);
-  const thisDay = date.getDay();
+  let thisDay = date.getDay();
 
   //If task comes before 10:00 and after 19:00
   date.getHours() <10 && date.setHours(10) && date.setMinutes(0);
-  date.getHours() >= 19 && date.setDate(date.getDate() + 1) && date.setHours(10) && date.setMinutes(0);
 
-  //If task came on weekend
+  if (date.getHours() >= 19) {
+    date.setDate(date.getDate() + 1);
+    date.setHours(10);
+    date.setMinutes(0);
+    thisDay += 1;
+    if (thisDay === 7) thisDay = 0;
+  } 
+
+  //If task comes on weekend
   thisDay === 0 && date.setDate(date.getDate() + 1) && date.setHours(10) && date.setMinutes(0);
   thisDay === 6 && date.setDate(date.getDate() + 2) && date.setHours(10) && date.setMinutes(0);
   thisDay === 5 && date.getHours() >= 19 && date.setDate(date.getDate() + 3) && date.setHours(10) && date.setMinutes(0);
